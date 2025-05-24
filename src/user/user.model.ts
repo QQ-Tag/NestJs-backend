@@ -1,7 +1,10 @@
-import { Column, Model, Table, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
 
-@Table({ tableName: 'users', timestamps: true })
-export class User extends Model<User> {
+@Table({
+  tableName: 'users',
+  timestamps: true,
+})
+export class User extends Model {
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
@@ -12,38 +15,37 @@ export class User extends Model<User> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-  })
-  name: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
     unique: true,
   })
-  email: string;
+  declare email: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  declare password: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  password: string;
+  declare name: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  phone?: string;
+  declare phone: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  whatsapp?: string;
+  declare whatsapp: string;
 
   @Column({
-    type: DataType.ARRAY(DataType.STRING),
+    type: DataType.STRING,
     allowNull: true,
-    defaultValue: [],
   })
-  linkedQrCodes: string[];
+  declare googleId: string;
 }

@@ -1,6 +1,6 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from './users.model';
+import { User } from './user.model';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -29,7 +29,6 @@ export class UsersService {
       password: hashedPassword,
       phone: userData.phone,
       whatsapp: userData.whatsapp,
-      linkedQrCodes: [], // Explicitly set default value for required field
     } as any); // Temporary type cast to bypass strict TypeScript checking
 
     return user;
