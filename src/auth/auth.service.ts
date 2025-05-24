@@ -23,7 +23,11 @@ export class AuthService {
     });
     console.log('User found:', user ? user.toJSON() : 'No user found');
 
-    if (user && user.password && await bcrypt.compare(password, user.password)) {
+    if (
+      user &&
+      user.password &&
+      (await bcrypt.compare(password, user.password))
+    ) {
       const { password, ...result } = user.toJSON();
       return result;
     }
@@ -61,12 +65,17 @@ export class AuthService {
 
   async verifyGoogleToken(token: string): Promise<any> {
     try {
+      console.log('Verifying token:', token.substring(0, 50) + '...');
+      console.log('Google Client ID:', process.env.GOOGLE_CLIENT_ID);
+
       const ticket = await this.googleClient.verifyIdToken({
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID,
       });
-      
+
       const payload = ticket.getPayload();
+      console.log('Payload:', payload);
+
       if (!payload) {
         throw new Error('Google token payload is missing');
       }
@@ -76,6 +85,7 @@ export class AuthService {
         googleId: payload.sub,
       };
     } catch (error) {
+      console.error('Google token verification error:', error);
       throw new Error('Invalid Google token');
     }
   }
