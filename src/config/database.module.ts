@@ -5,9 +5,9 @@ import { SequelizeModule } from '@nestjs/sequelize';
 @Module({
   imports: [
     ConfigModule.forRoot({
-        isGlobal: true,
-        envFilePath: '.env',
-      }),
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -18,7 +18,13 @@ import { SequelizeModule } from '@nestjs/sequelize';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         autoLoadModels: true,
-        synchronize: true, 
+        synchronize: true,
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false
+          }
+        }
       }),
       inject: [ConfigService],
     }),

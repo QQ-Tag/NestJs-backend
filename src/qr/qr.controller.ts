@@ -35,6 +35,11 @@ export class QrController {
     return this.qrService.getQrCodesByBatchId(batchId);
   }
 
+  @Get('qr-codes')
+  async getAllQrCodes(): Promise<QrCode[]> {
+    return this.qrService.getAllQrCodes();
+  }
+
   @Get('qr-codes/:id')
   async getQrCodeById(@Param('id', ParseIntPipe) id: number): Promise<QrCode | null> {
     return this.qrService.getQrCodeById(id);

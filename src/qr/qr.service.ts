@@ -23,7 +23,9 @@ export class QrService {
 
   async generateQrBatch(batchName: string, quantity: number): Promise<Batch> {
     if (!batchName || quantity <= 0) {
-      throw new BadRequestException('Batch name and positive quantity are required');
+      throw new BadRequestException(
+        'Batch name and positive quantity are required',
+      );
     }
 
     // Get the last QR code uniqueId to continue the sequence
@@ -87,6 +89,12 @@ export class QrService {
   async getQrCodesByBatchId(batchId: number): Promise<QrCode[]> {
     return this.qrCodeModel.findAll({
       where: { batchId, status: { [Op.ne]: QrStatus.DELETED } },
+    });
+  }
+
+  async getAllQrCodes(): Promise<QrCode[]> {
+    return this.qrCodeModel.findAll({
+      where: { status: { [Op.ne]: QrStatus.DELETED } },
     });
   }
 
