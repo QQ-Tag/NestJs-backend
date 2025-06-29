@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException,NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
 import * as bcrypt from 'bcrypt';
@@ -36,5 +36,25 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<User | null> {
     return this.userModel.findOne({ where: { email } });
+  }
+
+  async updateUser(
+    userId: string,
+    updateData: {
+      name?: string;
+      email?: string;
+      phone?: string;
+      whatsapp?: string;
+    }
+  ): Promise<User> {
+    await this.userModel.update(updateData, {
+      where: { id: userId }
+    });
+
+    const updatedUser = await this.userModel.findByPk(userId);
+    if (!updatedUser) {
+      throw new NotFoundException('User not found');
+    }
+    return updatedUser;
   }
 }
